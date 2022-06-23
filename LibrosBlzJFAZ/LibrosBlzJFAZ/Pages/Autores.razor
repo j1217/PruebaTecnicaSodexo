@@ -1,0 +1,47 @@
+﻿@page "/Autores"
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Data
+@inject HttpClient Http
+
+<h3>Autores</h3>
+<div class="row">
+    <div class="col-12 text-right">
+        <a href="AutorForm">Nuevo</a>
+    </div>
+</div>
+<table class="table">
+    <tr>
+        <td>Id</td>
+        <td>Nombre</td>
+        <td>FechaNacimiento</td>
+        <td>Ciudad</td>
+        <td>Correo</td>
+        <th></th>
+    </tr>
+    @if(oRespuesta != null && oRespuesta.Data != null)
+    {
+       @foreach(var oElemento in oRespuesta.Data)
+        {
+            <tr>
+                <td>@oElemento.Id</td>
+                <td>@oElemento.Nombre</td>
+                <td>@oElemento.FechaNacimiento</td>
+                <td>@oElemento.Ciudad</td>
+                <td>@oElemento.Correo</td>
+                <td>
+                    <a>Editar</a>
+                    <a>Eliminar</a>
+                </td>
+            </tr>
+        } 
+    }   
+
+</table>
+@code {
+    public string URL = "/api/Autores";
+    public RespuestaAutores oRespuesta = new RespuestaAutores();
+
+    protected override async Task OnInitializedAsync() =>
+    oRespuesta = await Http.GetFromJsonAsync<RespuestaAutores>(URL);
+}

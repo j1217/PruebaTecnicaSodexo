@@ -1,0 +1,60 @@
+﻿@page "/LibrosForm"
+@using Data 
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+
+<h3>Libros</h3>
+
+<EditForm Model="@oLibro">
+    <div class="container-fluid">       
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Titulo</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oLibro.Titutlo"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Año</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oLibro.Ano"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Genero</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oLibro.Genero"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">NumPaginas</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oLibro.NumPaginas"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Autor</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oLibro.NomAutor"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <div class="col-sm-12"> 
+                <button class="btn btn-primary" @onclick="Save">Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+        Libro oLibro = new Libro();
+        RespuestaLibros oRespuesta = new RespuestaLibros();
+        public string URL = "/api/Libros";
+        private async Task Save()
+        {
+            var response = await Http.PostAsJsonAsync<Libro>(URL, oLibro);
+            oRespuesta = response.Content.ReadFromJsonAsync<RespuestaLibros>().Result;
+            navigationManager.NavigateTo("/Autores");
+        }
+    }

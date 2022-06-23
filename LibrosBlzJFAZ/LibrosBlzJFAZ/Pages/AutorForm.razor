@@ -1,0 +1,54 @@
+﻿@page "/AutorForm"
+@using Data 
+@using System.Net.Http
+@using System.Net.Http.Json
+@inject HttpClient Http
+@inject NavigationManager navigationManager
+
+<h3>Autor</h3>
+
+<EditForm Model="@oAutor">
+    <div class="container-fluid">
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Nombre</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oAutor.Nombre"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Fecha Nacimiento</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oAutor.FechaNacimiento"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Ciudad</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oAutor.Ciudad"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <label class="col-sm-3">Correo</label>
+            <div class="col-sm-9"> 
+                <InputText class="form-control" @bind-Value="@oAutor.Correo"></InputText>
+            </div>
+        </div>
+        <div class="form-group row mb-1">
+            <div class="col-sm-12"> 
+                <button class="btn btn-primary" @onclick="Save">Guardar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+        Autor oAutor = new Autor();
+        RespuestaAutores oRespuesta = new RespuestaAutores();
+        public string URL = "/api/Autores";
+        private async Task Save()
+        {
+            var response = await Http.PostAsJsonAsync<Autor>(URL, oAutor);
+            oRespuesta = response.Content.ReadFromJsonAsync<RespuestaAutores>().Result;
+            navigationManager.NavigateTo("/Autores");
+        }
+    }

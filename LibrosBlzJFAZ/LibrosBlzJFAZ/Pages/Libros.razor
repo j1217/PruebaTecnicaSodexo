@@ -1,0 +1,49 @@
+﻿@page "/Libros"
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Data
+@inject HttpClient Http
+
+<h3>Libros</h3>
+<div class="row">
+    <div class="col-12 text-right">
+        <a href="LibroForm">Nuevo</a>
+    </div>
+</div>
+<table class="table">
+    <tr>
+        <td>Id</td>
+        <td>Titulo</td>
+        <td>Año</td>
+        <td>Genero</td>
+        <td># Paginas</td>
+        <td>Autor</td>
+        <th></th>
+    </tr>
+    @if(oRespuesta != null && oRespuesta.Data != null)
+    {
+       @foreach(var oElemento in oRespuesta.Data)
+        {
+            <tr>
+                <td>@oElemento.Id</td>
+                <td>@oElemento.Titutlo</td>
+                <td>@oElemento.Ano</td>
+                <td>@oElemento.Genero</td>
+                <td>@oElemento.NumPaginas</td>
+                <td>@oElemento.NomAutor</td>
+                <td>
+                    <a>Editar</a>
+                    <a>Eliminar</a>
+                </td>
+            </tr>
+        } 
+    }   
+
+</table>
+@code {
+    public string URL = "/api/Libros";
+    public RespuestaLibros oRespuesta = new RespuestaLibros();
+
+    protected override async Task OnInitializedAsync() =>
+    oRespuesta = await Http.GetFromJsonAsync<RespuestaLibros>(URL);
+}
